@@ -18,7 +18,7 @@
 <script>
     var yLabel = '-log<tspan baseline-shift="sub">10</tspan>False Discovery Rate',
         xLabel = 'log<tspan baseline-shift="sub">2</tspan>Fold-change',
-        file = window.location.href + "/report.tsv";
+        file = window.location.href.replace("index.html","") + "/report.tsv";
 
     var volcanoPlot = volcanoPlot()
         .xAxisLabel(xLabel)
