@@ -1,2 +1,2 @@
-# visualization_plugins
+# Visualization Plugins
 Set of utilities for interactive data visualization
