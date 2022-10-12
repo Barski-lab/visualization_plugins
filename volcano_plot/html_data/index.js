@@ -11,8 +11,8 @@ function volcanoPlot() {
         xTicks, // number of ticks on the axis
         yTicks,
         sampleID = "Gene",
-        significanceThreshold = 0.05, // significance threshold to colour by
-        foldChangeThreshold = 1.0, // fold change level to colour by
+        significanceThreshold = parseFloat(d3.select("#fdrthreshold").property("value")), // significance threshold to colour by
+        foldChangeThreshold = parseFloat(d3.select("#foldchange").property("value")), // fold change level to colour by
         colorRange, // colour range to use in the plot
         xScale = d3.scaleLinear(), // the values for the axes will be continuous
         yScale = d3.scaleLog();
@@ -38,18 +38,19 @@ function volcanoPlot() {
                 .domain(d3.extent(data, function(d) { return d[yColumn]; }))
                 .nice(); // adds "padding" so the domain extent is exactly the min and max values
 
+/*
             var zoom = d3.zoom()
                 .scaleExtent([1, 20])
                 .translateExtent([[0, 0], [width, height]])
                 .on('zoom', zoomFunction);
-
+*/
             // append the svg object to the selection
             var svg = d3.select(this).append('svg')
                 .attr('height', height)
                 .attr('width', width)
               .append('g')
-                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-                .call(zoom);
+                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+//                .call(zoom);
 
             // position the reset button and attach reset function
             d3.select('#resetBtn')
@@ -100,7 +101,7 @@ function volcanoPlot() {
             var circles = svg.append('g')
                 .attr('class', 'circlesContainer');
 
-            circles.selectAll(".dot")
+/*            circles.selectAll(".dot")
                 .data(data)
               .enter().append('circle')
                 .attr('r', 3)
@@ -112,12 +113,12 @@ function volcanoPlot() {
                 .on('mouseleave', function(d) {
                    return tooltip.style('visibility', 'hidden');
                 });
-
+*/
             var thresholdLines = svg.append('g')
                 .attr('class', 'thresholdLines');
 
             // add horizontal line at significance threshold
-            thresholdLines.append("svg:line")
+/*            thresholdLines.append("svg:line")
                 .attr('class', 'threshold')
                 .attr("x1", 0)
                 .attr("x2", innerWidth)
@@ -133,6 +134,10 @@ function volcanoPlot() {
                     .attr("y1", 0)
                     .attr("y2", innerHeight);
             });
+*/
+
+            d3.select('#apply')
+                .on('click', applyThresholds);
 
             var tooltip = d3.select("body")
                 .append("div")
@@ -185,6 +190,59 @@ function volcanoPlot() {
                     .ease(ease)
                     .call(zoom.transform, d3.zoomIdentity);
             }
+
+            function applyThresholds() {
+
+/*                var ease = d3.easePolyIn.exponent(4.0);
+                svg.transition().duration(750)
+                    .ease(ease)
+                    .call(zoom.transform, d3.zoomIdentity);
+*/
+            thresholdLines.remove();
+
+            foldChangeThreshold = parseFloat(d3.select("#foldchange").property("value"));
+            significanceThreshold = parseFloat(d3.select("#fdrthreshold").property("value"));
+
+
+            circles.remove();
+            circles = svg.append('g')
+                .attr('class', 'circlesContainer');
+
+            circles.selectAll(".dot")
+                .data(data)
+              .enter().append('circle')
+                .attr('r', 3)
+                .attr('cx', function(d) { return xScale(d[xColumn]); })
+                .attr('cy', function(d) { return yScale(d[yColumn]); })
+                .attr('class', circleClass)
+                .on('mouseenter', tipEnter)
+                .on("mousemove", tipMove)
+                .on('mouseleave', function(d) {
+                   return tooltip.style('visibility', 'hidden');
+                });
+            thresholdLines = svg.append('g')
+                .attr('class', 'thresholdLines');
+            // add horizontal line at significance threshold
+            thresholdLines.append("svg:line")
+                .attr('class', 'threshold')
+                .attr("x1", 0)
+                .attr("x2", innerWidth)
+                .attr("y1", yScale(significanceThreshold))
+                .attr("y2", yScale(significanceThreshold));
+
+            // add vertical line(s) at fold-change threshold (and negative fold-change)
+            [foldChangeThreshold, -1 * foldChangeThreshold].forEach(function(threshold) {
+                thresholdLines.append("svg:line")
+                    .attr('class', 'threshold')
+                    .attr("x1", xScale(threshold))
+                    .attr("x2", xScale(threshold))
+                    .attr("y1", 0)
+                    .attr("y2", innerHeight);
+            });
+
+            } //applyThresholds
+
+            applyThresholds();
         });
     }
 
