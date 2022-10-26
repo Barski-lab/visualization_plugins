@@ -26,7 +26,7 @@
         <div class="row">&nbsp;</div>
 
         <div class="row">
-            <div class="col-sm">
+            <div class="col-sm-18">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">Plot Title:</span>
@@ -41,7 +41,7 @@
                     <input type="text" class="form-control" aria-label="plotyaxis" id="plotyaxis" value='-log<tspan baseline-shift="sub">10</tspan>False Discovery Rate'>
                 </div>
 
-                <div class="input-group mb-5">
+                <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">x axis:</span>
                     </div>
@@ -50,8 +50,7 @@
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">FDR threshold:
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span class="input-group-text">FDR threshold:</span>
                     </div>
                     <input type="text" class="form-control" aria-label="fdrthreshold" id="fdrthreshold" value="0.05">
                 </div>
@@ -66,10 +65,10 @@
 
                 <button type="button" class="btn btn-outline-primary" id="apply">Update Plot</button>
 
-                <button type="button" class="btn btn-outline-primary" onclick="saveSvg()" id="exportsvg">Save as SVG</button> <!-- broken -->
-                <button type="button" class="btn btn-outline-primary" id="savesvg">Save as SVG (d3)</button> <!-- saves all black-->
+                <button type="button" class="btn btn-outline-primary" onclick="saveSvg()" id="exportsvg">Save as SVG</button> <!-- saves correctly but without color -->
+                <button type="button" class="btn btn-outline-primary" id="savesvg">Save as SVG (d3)</button> <!-- saves correctly but without color-->
                 <button type="button" class="btn btn-outline-primary" id="generate">Save as SVG (d3-v3)</button> <!-- saves correctly but without color-->
-
+                
             </div>
             <div class="col-sm">&nbsp; </div>
         </div>
@@ -142,7 +141,6 @@
                 document.getElementById("link").href = url;
                 //you can download svg file by right click menu.
                 */
-                console.log('1')
                 var svg = document.getElementById("svg");
                 var serializer = new XMLSerializer();
                 var source = serializer.serializeToString(svg);
@@ -152,25 +150,28 @@
 
 
                 if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
+                    console.log('matched xmlns tag to format')
                     source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
                 }
                 if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
+                    console.log('matched svg tag to format')
                     source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
                 }
 
 
                 var preface = '<?xml version="1.0" standalone="no"?>\r\n';
                 var svgBlob = new Blob([preface, source], { type: "image/svg+xml;charset=utf-8" });
+                console.log('blob: ', svgBlob);
                 var svgUrl = URL.createObjectURL(svgBlob);
                 var downloadLink = document.createElement("a");
-                console.log('2')
                 downloadLink.href = svgUrl;
-                downloadLink.download = name;
+                downloadLink.download = "exampleSvg.svg";
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
             }
 
+            
         </script>
 
 </body>
