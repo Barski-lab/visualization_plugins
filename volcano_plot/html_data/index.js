@@ -153,24 +153,42 @@ function volcanoPlot() {
             d3.select('#savesvg')
                 .on('click', exportSVG);
 
-            d3.select('#saveimg').on('click', saveImg);
             d3.select("#generate").on("click", writeDownloadLink);
         
             function writeDownloadLink(){
                 try {
                     var isFileSaverSupported = !!new Blob();
-                    console.log(`ifFileSverSupported: ${isFileSaverSupported}`)
+                    console.log(`is FileSaver Supported: ${isFileSaverSupported}`)
                 } catch (e) {
                     alert("blob not supported");
                 }
-            
-                var html = d3.select("svg")
+                
+                /* combinations of selectors and html gets that do and don't work
+                    d3.select("svg")...innerHtml => axis + title + all_black_plot
+                    d3.select("#svg")...innerHtml => ^^
+                    d3.select("svg")...outerHtml => ^^
+                    d3.select("#svg")...outerHtml => ^^
+                    d3.select("chart")...innerHtml => ^^
+                    d3.select("#chart")...innerHtml => ^^
+                    d3.select("#chart")...outerHtml => ^^
+                    d3.select("chart")...outerHtml => ^^
+                */
+                var html = d3.select("#svg")
                     .attr("title", "test2")
                     .attr("version", 1.1)
                     .attr("xmlns", "http://www.w3.org/2000/svg")
-                    .node().parentNode.innerHTML;
+                    .node().outerHTML; // .parentNode.innerHTML;
+                
+                console.log('html: ', html);
+                /* 
+                            d3.select("svg")
+                    .attr("title", "test2")
+                    .attr("version", 1.1)
+                    .attr("xmlns", "http://www.w3.org/2000/svg")
+                    .node().outerHtml; */
             
-                var blob = new Blob([html], {type: "image/svg+xml"});
+                console.log('blob: ', blob);
+                var blob = new Blob([html], {type: "image/svg+xml"}); 
                 saveAs(blob, "exampleSVG.svg");
             };
             var tooltip = d3.select("body")
@@ -307,11 +325,11 @@ function volcanoPlot() {
             } 
 
             function exportSVG(){
-                var svg = document.getElementById("svg");
-                console.log('svg from doc: ', svg)
+                var svgEle = document.getElementById("svg");
                 var serializer = new XMLSerializer();
-                var source = serializer.serializeToString(svg);
-                console.log('2')
+                try{
+                    var source = serializer.serializeToString(svgEle);
+                }catch(err){console.log('Error creating serializer from svg element', 'svgElement: ', svgEle, 'err: ', err)}
 
                 source = source.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink='); // Fix root xlink without namespace
 
@@ -337,119 +355,12 @@ function volcanoPlot() {
                 downloadLink.href = svgUrl;
                 //downloadLink.download = name;
                 document.body.appendChild(downloadLink);
+                //downloadLink.setAttribute('onClick', window.open(this.href,'popUpWindow'));//onclick = "window.open(this.href,'popUpWindow')"
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
             }
 
-            function saveImg(){
-                var svgString = getSVGString(svg.node());
-                console.log('got svgString');
-                svgString2Image( svgString, 2*width, 2*height, 'png', save ); // passes Blob and filesize String to the callback
-                console.log('svgString2Image finished');
-                function save( dataBlob, filesize ){
-                    saveAs( dataBlob, 'D3 vis exported to PNG.png' ); // FileSaver.js function
-                }
-            }
 
-            function getSVGString( svgNode ) {
-                svgNode.setAttribute('xlink', 'http://www.w3.org/1999/xlink');
-                var cssStyleText = getCSSStyles( svgNode );
-                appendCSS( cssStyleText, svgNode );
-            
-                var serializer = new XMLSerializer();
-                var svgString = serializer.serializeToString(svgNode);
-                svgString = svgString.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink='); // Fix root xlink without namespace
-                svgString = svgString.replace(/NS\d+:href/g, 'xlink:href'); // Safari NS namespace fix
-            
-                return svgString;
-            
-                function getCSSStyles( parentElement ) {
-                    var selectorTextArr = [];
-            
-                    // Add Parent element Id and Classes to the list
-                    selectorTextArr.push( '#'+parentElement.id );
-                    for (var c = 0; c < parentElement.classList.length; c++)
-                            if ( !contains('.'+parentElement.classList[c], selectorTextArr) )
-                                selectorTextArr.push( '.'+parentElement.classList[c] );
-            
-                    // Add Children element Ids and Classes to the list
-                    var nodes = parentElement.getElementsByTagName("*");
-                    for (var i = 0; i < nodes.length; i++) {
-                        var id = nodes[i].id;
-                        if ( !contains('#'+id, selectorTextArr) )
-                            selectorTextArr.push( '#'+id );
-            
-                        var classes = nodes[i].classList;
-                        for (var c = 0; c < classes.length; c++)
-                            if ( !contains('.'+classes[c], selectorTextArr) )
-                                selectorTextArr.push( '.'+classes[c] );
-                    }
-            
-                    // Extract CSS Rules
-                    var extractedCSSText = "";
-                    for (var i = 0; i < document.styleSheets.length; i++) {
-                        var s = document.styleSheets[i];
-                        
-                        try {
-                            if(!s.cssRules) continue;
-                        } catch( e ) {
-                                if(e.name !== 'SecurityError') throw e; // for Firefox
-                                continue;
-                            }
-            
-                        var cssRules = s.cssRules;
-                        for (var r = 0; r < cssRules.length; r++) {
-                            if ( contains( cssRules[r].selectorText, selectorTextArr ) )
-                                extractedCSSText += cssRules[r].cssText;
-                        }
-                    }
-                    
-            
-                    return extractedCSSText;
-            
-                    function contains(str,arr) {
-                        return arr.indexOf( str ) === -1 ? false : true;
-                    }
-            
-                }
-            
-                function appendCSS( cssText, element ) {
-                    var styleElement = document.createElement("style");
-                    styleElement.setAttribute("type","text/css"); 
-                    styleElement.innerHTML = cssText;
-                    var refNode = element.hasChildNodes() ? element.children[0] : null;
-                    element.insertBefore( styleElement, refNode );
-                }
-            }
-            
-            
-            function svgString2Image( svgString, width, height, format, callback ) {
-                var format = format ? format : 'png';
-            
-                var imgsrc = 'data:image/svg+xml;base64,'+ btoa( unescape( encodeURIComponent( svgString ) ) ); // Convert SVG string to data URL
-            
-                var canvas = document.createElement("canvas");
-                var context = canvas.getContext("2d");
-            
-                canvas.width = width;
-                canvas.height = height;
-                
-                var image = new Image();
-                image.onload = function() {
-                    console.log('image loaded within svgString2Image')
-                    context.clearRect ( 0, 0, width, height );
-                    context.drawImage(image, 0, 0, width, height);
-            
-                    canvas.toBlob( function(blob) {
-                        var filesize = Math.round( blob.length/1024 ) + ' KB';
-                        if ( callback ) callback( blob, filesize );
-                    });
-            
-                    
-                };
-            
-                image.src = imgsrc;
-            }
             updatePlot();
         });
     }
