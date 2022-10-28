@@ -62,12 +62,46 @@
                     <input type="text" class="form-control" aria-label="foldchange" id="foldchange" value="1">
                 </div>
 
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Color Mode (v1):</span>
+                    </div>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-secondary active">
+                        <input type="radio" name="options" id="colormode1" autocomplete="off" checked> Default (4 colors)
+                        </label>
+                        <label class="btn btn-secondary">
+                        <input type="radio" name="options" id="colormode2" autocomplete="off"> Pos-Neg (2 colors)
+                        </label>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Color Mode (v2):</span>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" data-on="4 color mode" data-off="2 color mode" id="colormodetoggle" checked data-toggle="toggle">
+                    </div>  
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Color Mode (v3):</span>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01">
+                    <!--<option selected>Choose...</option>-->
+                    <option selected value="1">color mode 1 (4 colors)</option>
+                    <option value="2">color mode 2 (2 colors)</option>
+                    </select>
+                </div>
 
+
+                <!-- KEEP AT BOTTOM OF FORM -->
                 <button type="button" class="btn btn-outline-primary" id="apply">Update Plot</button>
 
-                <button type="button" class="btn btn-outline-primary" onclick="saveSvg()" id="exportsvg">Save as SVG</button> <!-- saves correctly but without color -->
-                <button type="button" class="btn btn-outline-primary" id="savesvg">Save as SVG (d3)</button> <!-- saves correctly but without color-->
-                <button type="button" class="btn btn-outline-primary" id="generate">Save as SVG (d3-v3)</button> <!-- saves correctly but without color-->
+                <!-- export buttons should check form values against plot values. if any differences, give user option to download 'as is' or with form options applied-->
+                <button type="button" class="btn btn-outline-primary" onclick="saveSvg()" id="exportsvg">Save as SVG</button>
+                <button type="button" class="btn btn-outline-primary" id="savesvg">Save as SVG (d3)</button> 
+                <button type="button" class="btn btn-outline-primary" id="generate">Save as SVG (d3-v3)</button>
                 
             </div>
             <div class="col-sm">&nbsp; </div>

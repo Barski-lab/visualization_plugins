@@ -50,7 +50,7 @@ function volcanoPlot() {
                 .attr('id', 'svg')
                 .attr('height', height)
                 .attr('width', width)
-                .style('color', 'white')
+                .style('color', 'white') // make background setting part of the 'advanced plot options' tab
                 .append('g')
                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
             //                .call(zoom);
@@ -246,6 +246,8 @@ function volcanoPlot() {
                 else return 'dot';
             }
             function circleStyle(d) {
+                // where color scheme toggle can be set
+                // colors used should be able to be set by user
                 if (d[yColumn] <= significanceThreshold && Math.abs(d[xColumn]) >= foldChangeThreshold) return 'green';
                 else if (d[yColumn] <= significanceThreshold) return 'red';
                 else if (Math.abs(d[xColumn]) >= foldChangeThreshold) return 'grey';
