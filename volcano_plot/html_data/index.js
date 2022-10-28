@@ -360,37 +360,38 @@ function volcanoPlot() {
                 var serializer = new XMLSerializer();
                 try{
                     var source = serializer.serializeToString(svgEle);
+                
+
+                    source = source.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink='); // Fix root xlink without namespace
+
+                    source = source.replace(/ns\d+:href/g, 'xlink:href'); // Safari NS namespace fix.
+
+
+                    if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
+                        console.log('matched xmlns tag to format')
+                        source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+                    }
+                    if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
+                        console.log('matched svg tag to format')
+                        source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+                    }
+
+
+                    var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+                    var svgBlob = new Blob([preface, source], { type: "image/svg+xml;charset=utf-8" });
+                    console.log('blob: ', svgBlob);
+                    var svgUrl = URL.createObjectURL(svgBlob);
+                    var downloadLink = document.createElement("a");
+                    downloadLink.href = svgUrl;
+                    downloadLink.download = "exampleSvg.svg";
+                    document.body.appendChild(downloadLink);
+                    //downloadLink.setAttribute('onClick', window.open(this.href,'popUpWindow'));//onclick = "window.open(this.href,'popUpWindow')"
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
                 }catch(err){console.log('Error creating serializer from svg element', 'svgElement: ', svgEle, 'err: ', err)}
-
-                source = source.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink='); // Fix root xlink without namespace
-
-                source = source.replace(/ns\d+:href/g, 'xlink:href'); // Safari NS namespace fix.
-
-
-                if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
-                    console.log('matched xmlns tag to format')
-                    source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
-                }
-                if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
-                    console.log('matched svg tag to format')
-                    source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
-                }
-
-
-                var preface = '<?xml version="1.0" standalone="no"?>\r\n';
-                var svgBlob = new Blob([preface, source], { type: "image/svg+xml;charset=utf-8" });
-                console.log('blob: ', svgBlob);
-                var svgUrl = URL.createObjectURL(svgBlob);
-                var downloadLink = document.createElement("a");
-                downloadLink.href = svgUrl;
-                downloadLink.download = "exampleSvg.svg";
-                document.body.appendChild(downloadLink);
-                //downloadLink.setAttribute('onClick', window.open(this.href,'popUpWindow'));//onclick = "window.open(this.href,'popUpWindow')"
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
             }
 
-            function downloadSvg(){
+            /*function downloadSvg(){
                 var svgNode = d3.select("#svg")
                     .attr("title", "test2")
                     .attr("version", 1.1)
@@ -460,7 +461,7 @@ function volcanoPlot() {
                 var refNode = element.hasChildNodes() ? element.children[0] : null;
                 element.insertBefore( styleElement, refNode );
             }
-        
+            */
         
 
             updatePlot();
