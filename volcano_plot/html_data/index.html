@@ -82,6 +82,7 @@
                     <input type="text" class="form-control" aria-label="foldchange" id="foldchange" value="1">
                 </div>
 
+                <!-- color mode no longer needed with advanced coloring options 
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">Color Mode (v1):</span>
@@ -112,12 +113,13 @@
                         <span class="input-group-text">Color Mode (v3):</span>
                     </div>
                     <select class="custom-select" id="inputGroupSelect01">
-                        <!--<option selected>Choose...</option>-->
                         <option selected value="1">color mode 1 (4 colors)</option>
                         <option value="2">color mode 2 (2 colors)</option>
                     </select>
                 </div>
+                -->
 
+                <!-- other ways to do expandables (also not working) 
                 <div class="input-group mb-3">
                     <a class="btn btn-primary" data-toggle="collapse" data-target="#advancedPlotOptions" role="button"
                         aria-expanded="true" aria-controls="advancedPlotOptions">
@@ -155,6 +157,7 @@
                         </div>
                     </div>
                 </div>
+                -->
 
                 <!--<div class="input-group mb-3">-->
                     <div class="card">
@@ -184,47 +187,48 @@
                                         <!-- input -->
                                         <input type="number" class="form-control" id="plotdotsize" aria-label="plot dot size" min="1" max="100" value="3">
                                     </div>
+                                    
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Accepted (pos) X color:</span>
+                                        </div>
+                                        <input type="color" class="form-control" id="acceptedxcolorpos"  value="#00ff00"> <!-- initial value should reflect graph-->
+                                       
+                                    </div>
+                                    
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Accepted (neg) X color:</span>
+                                        </div>
+                                        <input type="color" class="form-control" id="acceptedxcolorneg"  value="#00ff00"> <!-- initial value should reflect graph-->
+                                       
+                                    </div>                                 
 
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Accepted data point color:</span>
+                                            <span class="input-group-text">Rejected X (only) color:</span>
                                         </div>
-                                        <!--<div class="card bg-color">
-                                            <div class="card-body text-center d-flex justify-content-center align-items-center flex-column">
-                                              <p>My background color will be changed</p>
-                                              <button id="color-picker-3" class="btn btn-outline-primary btn-sm">Color Picker</button>
-                                            </div>
-                                          </div>-->
+                                        <input type="color" class="form-control" id="rejectedxcolor"  value="#ff0000">
+                                        <!-- <span class="input-group-text colorpicker-input-addon"></span> -->
+                                    </div>
 
-                                        <input type="color" class="form-control" id="rejectedcolor" name="favcolor" value="#ff0000"> <!-- initial value should reflect graph-->
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Rejected Y (only) color:</span>
+                                        </div>
+                                        <input type="color" class="form-control" id="rejectedycolor"  value="#cccccc">
+                                        <!-- <span class="input-group-text colorpicker-input-addon"></span> -->
+                                    </div>
+
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Rejected X and Y color:</span>
+                                        </div>
+                                        <input type="color" class="form-control" id="rejectedbothcolor"  value="#000000">
                                         <!-- <span class="input-group-text colorpicker-input-addon"></span> -->
                                     </div>
 
                                     
-
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Rejected X & Rejected Y color:</span>
-                                        </div>
-                                        <input type="color" class="form-control" id="rejectedcolor" name="favcolor" value="#ff0000">
-                                        <!-- <span class="input-group-text colorpicker-input-addon"></span> -->
-                                    </div>
-
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">(ONLY) Rejected X color:</span>
-                                        </div>
-                                        <input type="color" class="form-control" id="rejectedcolor" name="favcolor" value="#ff0000">
-                                        <!-- <span class="input-group-text colorpicker-input-addon"></span> -->
-                                    </div>
-
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">(ONLY) Rejected Y color:</span>
-                                        </div>
-                                        <input type="color" class="form-control" id="rejectedcolor" name="favcolor" value="#ff0000">
-                                        <!-- <span class="input-group-text colorpicker-input-addon"></span> -->
-                                    </div>
 
                                     
                                 </div>

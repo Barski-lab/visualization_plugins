@@ -18,7 +18,12 @@ function volcanoPlot() {
         yScale = d3.scaleLog(),
         plotTitle = d3.select('#plottitle').property("value"),
         plotDotSize = parseInt(d3.select("#plotdotsize").property("value")),
-        plotDotTransparency = parseFloat(d3.select("#plotdotopacity").property("value"));
+        plotDotTransparency = parseFloat(d3.select("#plotdotopacity").property("value")),
+        acceptedColorXpos = d3.select("#acceptedxcolorpos").property("value"),
+        acceptedColorXneg = d3.select("#acceptedxcolorneg").property("value"),
+        rejectedColorX = d3.select("#rejectedxcolor").property("value"),
+        rejectedColorY = d3.select("#rejectedycolor").property("value"),
+        rejectedColorBoth = d3.select("#rejectedbothcolor").property("value");
 
 
 
@@ -235,10 +240,12 @@ function volcanoPlot() {
             function circleStyle(d) {
                 // where color scheme toggle can be set
                 // colors used should be able to be set by user
-                if (d[yColumn] <= significanceThreshold && Math.abs(d[xColumn]) >= foldChangeThreshold) return 'green';
-                else if (d[yColumn] <= significanceThreshold) return 'red';
-                else if (Math.abs(d[xColumn]) >= foldChangeThreshold) return 'grey';
-                else return 'black';
+                //if (d[yColumn] <= significanceThreshold && Math.abs(d[xColumn]) >= foldChangeThreshold) return "#00ff00";//'green';
+                if(d[yColumn] <= significanceThreshold && d[xColumn] >= foldChangeThreshold) return acceptedColorXpos;
+                else if(d[yColumn] <= significanceThreshold && Math.abs(d[xColumn]) >= foldChangeThreshold) return acceptedColorXneg;
+                else if (d[yColumn] <= significanceThreshold) return rejectedColorX; //"#ff0000"//'red';
+                else if (Math.abs(d[xColumn]) >= foldChangeThreshold) return rejectedColorY; //'#cccccc';
+                else return rejectedColorBoth; //'#000000';
             }
 
 
@@ -266,6 +273,11 @@ function volcanoPlot() {
                 plotTitle = d3.select('#plottitle').property("value");
                 xAxisLabel = d3.select("#plotxaxis").property("value");
                 yAxisLabel = d3.select("#plotyaxis").property("value");
+                acceptedColorXpos = d3.select("#acceptedxcolorpos").property("value");
+                acceptedColorXneg = d3.select("#acceptedxcolorneg").property("value");
+                rejectedColorX = d3.select("#rejectedxcolor").property("value");
+                rejectedColorY = d3.select("#rejectedycolor").property("value");
+                rejectedColorBoth = d3.select("#rejectedbothcolor").property("value");
 
                 // reset the plot
                 thresholdLines.remove();
