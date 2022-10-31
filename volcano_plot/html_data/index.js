@@ -381,12 +381,12 @@ function volcanoPlot() {
                     .attr('cx', function (d) { return xScale(d[xColumn]); })
                     .attr('cy', function (d) { return yScale(d[yColumn]); })
                     .style('fill', circleStyle)
-                    .style('opacity', plotDotTransparency);
-                    /*.on('mouseenter', tipEnter)
-                    .on("mousemove", tipMove)
+                    .style('opacity', plotDotTransparency)
+                    .on('mouseenter', tipEnter)
+                    //.on("mousemove", tipMove)
                     .on('mouseleave', function (d) {
                         return tooltip.style('visibility', 'hidden');
-                    });*/
+                    });
 
                 thresholdLines = svg.append('g').attr('class', 'thresholdLines');
 
