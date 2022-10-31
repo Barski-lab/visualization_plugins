@@ -16,7 +16,9 @@ function volcanoPlot() {
         colorRange, // colour range to use in the plot
         xScale = d3.scaleLinear(), // the values for the axes will be continuous
         yScale = d3.scaleLog(),
-        plotTitle = d3.select('#plottitle').property("value");
+        plotTitle = d3.select('#plottitle').property("value"),
+        plotDotSize = parseInt(d3.select("#plotdotsize").property("value")),
+        plotDotTransparency = parseFloat(d3.select("#plotdotopacity").property("value"));
 
 
 
@@ -170,16 +172,7 @@ function volcanoPlot() {
                     alert("blob not supported");
                 }
                 
-                /* combinations of selectors and html gets that do and don't work
-                    d3.select("svg")...innerHtml => axis + title + all_black_plot
-                    d3.select("#svg")...innerHtml => ^^
-                    d3.select("svg")...outerHtml => ^^
-                    d3.select("#svg")...outerHtml => ^^
-                    d3.select("chart")...innerHtml => ^^
-                    d3.select("#chart")...innerHtml => ^^
-                    d3.select("#chart")...outerHtml => ^^
-                    d3.select("chart")...outerHtml => ^^
-                */
+                
                 var html = d3.select("#svg")
                     .attr("title", "test2")
                     .attr("version", 1.1)
@@ -187,17 +180,11 @@ function volcanoPlot() {
                     .node().outerHTML; // .parentNode.innerHTML;
                 
                 if(!html){console.log('issue getting html: ', html);}
-                /* 
-                            d3.select("svg")
-                    .attr("title", "test2")
-                    .attr("version", 1.1)
-                    .attr("xmlns", "http://www.w3.org/2000/svg")
-                    .node().outerHtml; */
-            
-                var blob = new Blob([html], {type: "image/svg+xml"}); 
+                //var tempTypeForDownlaod = "image/png";
+                var blob = new Blob([html], {type: "image/svg+xml;charset=utf-8"}); 
                 console.log('blob: ', blob);
                 saveAs(blob, "exampleSVG.svg");
-            };            
+            }       
 
             var tooltip = d3.select("body")
                 .append("div")
@@ -254,6 +241,7 @@ function volcanoPlot() {
                 else return 'black';
             }
 
+
             function resetZoom() {
                 var ease = d3.easePolyIn.exponent(4.0);
                 svg.transition().duration(750)
@@ -271,6 +259,8 @@ function volcanoPlot() {
                 */
 
                 // get values from form 
+                plotDotSize = parseInt(d3.select("#plotdotsize").property("value"));
+                plotDotTransparency = parseFloat(d3.select("#plotdotopacity").property("value"));
                 foldChangeThreshold = parseFloat(d3.select("#foldchange").property("value"));
                 significanceThreshold = parseFloat(d3.select("#fdrthreshold").property("value"));
                 plotTitle = d3.select('#plottitle').property("value");
@@ -316,16 +306,17 @@ function volcanoPlot() {
                 circles.selectAll(".dot")
                     .data(data)
                     .enter().append('circle')
-                    .attr('r', 3)
+                    .attr('r', plotDotSize) // SIZE OF DOT
                     .attr('cx', function (d) { return xScale(d[xColumn]); })
                     .attr('cy', function (d) { return yScale(d[yColumn]); })
                     //.attr('class', circleClass)
                     .style('fill', circleStyle)
-                    .on('mouseenter', tipEnter)
+                    .style('opacity', plotDotTransparency);
+                    /*.on('mouseenter', tipEnter)
                     .on("mousemove", tipMove)
                     .on('mouseleave', function (d) {
                         return tooltip.style('visibility', 'hidden');
-                    });
+                    });*/
 
                 thresholdLines = svg.append('g')
                     .attr('class', 'thresholdLines');
