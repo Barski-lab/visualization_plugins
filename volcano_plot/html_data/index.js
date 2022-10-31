@@ -1,20 +1,69 @@
+/**
+ * 
+ * @returns d3 chart representing a volcano plot
+ */
 function volcanoPlot() {
-    var width = 960,
-        height = 500,
-        margin = { top: 20, right: 20, bottom: 40, left: 50 },
-        xColumn, // name of the variable to be plotted on the axis
-        yColumn,
+    /** below are the variables used to track positioning of different chart components:
+     
+
+        width = 960,                                                                        // default for sizing
+        height = 500,                                                                       // default for sizing
+        margin = { top: 20, right: 20, bottom: 40, left: 50 },                              // default for sizing
+        
+        xColumn = "log2FoldChange",                                                         // TODO: name column in data file for plotting X-axis
+        yColumn = "padj",                                                                   // TODO: name column in data file for plotting Y-axis
+        
+        xAxisLabel = d3.select("#plotxaxis").property("value"),                             // TODO: label for x axis                                                                                       
+        yAxisLabel = d3.select("#plotyaxis").property("value"),                             // TODO: label for y axis
+                                                                                            // x&y axis label currently have defaults established in html. moving to here requires some more work
+
+        xAxisLabelOffset,                                                                   // offset for the label of the axis (not customizable)
+        yAxisLabelOffset,
+        
+        xTicks,                                                                             // number of ticks on the axis (not customizable)
+        yTicks,
+        
+        sampleID = "Gene",                                                                  // should be set according to workflow run       
+        
+        significanceThreshold = parseFloat(d3.select("#fdrthreshold").property("value")),   // significance threshold to colour by
+        foldChangeThreshold = parseFloat(d3.select("#foldchange").property("value")),       // fold change level to colour by
+                                                                                            // threshholds currently have default coming from html. more work to have them settable here
+        
+                                                                                            colorRange,                                                                         // colour range to use in the plot (probably deprecated)
+
+        xScale = d3.scaleLinear(),                                                          // the values for the x-axes will be continuous
+        yScale = d3.scaleLog(),                                                             // values for y-axis will be logarithmic
+                                                                                            // both should be settable 
+        plotTitle = d3.select('#plottitle').property("value"),
+        
+        plotDotSize = parseInt(d3.select("#plotdotsize").property("value")),
+        plotDotTransparency = parseFloat(d3.select("#plotdotopacity").property("value")),
+        
+        acceptedColorXpos = d3.select("#acceptedxcolorpos").property("value"),
+        acceptedColorXneg = d3.select("#acceptedxcolorneg").property("value"),
+        rejectedColorX = d3.select("#rejectedxcolor").property("value"),
+        rejectedColorY = d3.select("#rejectedycolor").property("value"),
+        rejectedColorBoth = d3.select("#rejectedbothcolor").property("value");
+    
+     */
+    
+    // pretty much every var with a d3.select needs to have work done to make it settable according to workflow
+    var width = 960,                                                                    
+        height = 500,                                                                   
+        margin = { top: 20, right: 20, bottom: 40, left: 50 },                          
+        xColumn = "log2FoldChange",                                                     
+        yColumn = "padj",                                                               
         xAxisLabel = d3.select("#plotxaxis").property("value"),
         yAxisLabel = d3.select("#plotyaxis").property("value"),
-        xAxisLabelOffset, // offset for the label of the axis
+        xAxisLabelOffset, 
         yAxisLabelOffset,
-        xTicks, // number of ticks on the axis
+        xTicks, 
         yTicks,
         sampleID = "Gene",
-        significanceThreshold = parseFloat(d3.select("#fdrthreshold").property("value")), // significance threshold to colour by
-        foldChangeThreshold = parseFloat(d3.select("#foldchange").property("value")), // fold change level to colour by
-        colorRange, // colour range to use in the plot
-        xScale = d3.scaleLinear(), // the values for the axes will be continuous
+        significanceThreshold = parseFloat(d3.select("#fdrthreshold").property("value")), 
+        foldChangeThreshold = parseFloat(d3.select("#foldchange").property("value")), 
+        colorRange, 
+        xScale = d3.scaleLinear(),
         yScale = d3.scaleLog(),
         plotTitle = d3.select('#plottitle').property("value"),
         plotDotSize = parseInt(d3.select("#plotdotsize").property("value")),
@@ -28,8 +77,8 @@ function volcanoPlot() {
 
 
     function chart(selection) {
-        var innerWidth = width - margin.left - margin.right, // set the size of the chart within its container
-            innerHeight = height - margin.top - margin.bottom;
+        var innerWidth = width - margin.left - margin.right, 
+            innerHeight = height - margin.top - margin.bottom; // set the size of the chart according to its container
 
         selection.each(function (data) {
 
@@ -52,12 +101,13 @@ function volcanoPlot() {
                             .translateExtent([[0, 0], [width, height]])
                             .on('zoom', zoomFunction);
             */
-            // append the svg object to the selection
+            // append the svg object to the selection. svg object is what is exported as svg/png/pdf
             var svg = d3.select(this).append('svg')
                 .attr('id', 'svg')
                 .attr('height', height)
                 .attr('width', width)
-                .style('color', 'white') // make background setting part of the 'advanced plot options' tab
+                //.style('color', 'white') // make background setting part of the 'advanced plot options' tab (not working?)
+                .style('background-color', 'white')
                 .append('g')
                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
             //                .call(zoom);
@@ -82,6 +132,7 @@ function volcanoPlot() {
                 .style("font-size", "16px") 
                 .style("text-decoration", "underline")  
                 .text(plotTitle);
+
             // add the axes
             var xAxis = d3.axisBottom(xScale);
             var yAxis = d3.axisLeft(yScale)
@@ -94,7 +145,6 @@ function volcanoPlot() {
                 .call(xAxis);
 
             var gxLabel = gX.append('text')
-                //.attr('class', 'label')
                 .style('fill', '#666')
                 .style('font-weight', '700')
                 .style('font-size', '12px')
@@ -138,8 +188,7 @@ function volcanoPlot() {
                                return tooltip.style('visibility', 'hidden');
                             });
             */
-            var thresholdLines = svg.append('g')
-                .attr('class', 'thresholdLines');
+            var thresholdLines = svg.append('g').attr('class', 'thresholdLines');
 
             // add horizontal line at significance threshold
             /*            thresholdLines.append("svg:line")
@@ -160,15 +209,13 @@ function volcanoPlot() {
                         });
             */
 
-            d3.select('#apply')
-                .on('click', updatePlot);
+            d3.select('#apply').on('click', updatePlot);
 
 
-            d3.select('#savesvg')
-                .on('click', exportSVG);
+            d3.select('#savesvg').on('click', exportSVG);
 
+            // setup export btn
             d3.select("#generate").on("click", writeDownloadLinkV1);
-        
             function writeDownloadLinkV1(){
                 try {
                     var isFileSaverSupported = !!new Blob();
@@ -185,7 +232,6 @@ function volcanoPlot() {
                     .node().outerHTML; // .parentNode.innerHTML;
                 
                 if(!html){console.log('issue getting html: ', html);}
-                //var tempTypeForDownlaod = "image/png";
                 var blob = new Blob([html], {type: "image/svg+xml;charset=utf-8"}); 
                 console.log('blob: ', blob);
                 saveAs(blob, "exampleSVG.svg");
@@ -231,12 +277,21 @@ function volcanoPlot() {
                     .attr('stroke-width', 1 / transform.k);
             }
 
+            /**
+             * @deprecated
+             * returned a css class name to use according to a data points position in relation to threshold lines
+             */
             function circleClass(d) {
                 if (d[yColumn] <= significanceThreshold && Math.abs(d[xColumn]) >= foldChangeThreshold) return 'dot sigfold';
                 else if (d[yColumn] <= significanceThreshold) return 'dot sig';
                 else if (Math.abs(d[xColumn]) >= foldChangeThreshold) return 'dot fold';
                 else return 'dot';
             }
+
+            /**
+             * returns a color hex color according to a data points position in relation to threshold lines
+             * hex color based on what the user has selected in 'advanced plot options' tab
+             */
             function circleStyle(d) {
                 // where color scheme toggle can be set
                 // colors used should be able to be set by user
@@ -248,7 +303,6 @@ function volcanoPlot() {
                 else return rejectedColorBoth; //'#000000';
             }
 
-
             function resetZoom() {
                 var ease = d3.easePolyIn.exponent(4.0);
                 svg.transition().duration(750)
@@ -256,6 +310,13 @@ function volcanoPlot() {
                     .call(zoom.transform, d3.zoomIdentity);
             }
 
+            /**
+             * updates plot according to form values
+             * steps:
+             * 1. get form values
+             * 2. reset relevant plot components
+             * 3. redraw plot
+             */
             function updatePlot() {
 
                 /* 
@@ -295,7 +356,6 @@ function volcanoPlot() {
                     .text(plotTitle);
 
                 gxLabel = gX.append('text')
-                    //.attr('class', 'label')
                     .style('fill', '#666')
                     .style('font-weight', '700')
                     .style('font-size', '12px')
@@ -304,7 +364,6 @@ function volcanoPlot() {
                     .html(xAxisLabel || xColumn);
     
                 gyLabel = gY.append('text')
-                    //.attr('class', 'label')
                     .style('fill', '#666')
                     .style('font-weight', '700')
                     .style('font-size', '12px')
@@ -318,10 +377,9 @@ function volcanoPlot() {
                 circles.selectAll(".dot")
                     .data(data)
                     .enter().append('circle')
-                    .attr('r', plotDotSize) // SIZE OF DOT
+                    .attr('r', plotDotSize) 
                     .attr('cx', function (d) { return xScale(d[xColumn]); })
                     .attr('cy', function (d) { return yScale(d[yColumn]); })
-                    //.attr('class', circleClass)
                     .style('fill', circleStyle)
                     .style('opacity', plotDotTransparency);
                     /*.on('mouseenter', tipEnter)
@@ -330,11 +388,10 @@ function volcanoPlot() {
                         return tooltip.style('visibility', 'hidden');
                     });*/
 
-                thresholdLines = svg.append('g')
-                    .attr('class', 'thresholdLines');
+                thresholdLines = svg.append('g').attr('class', 'thresholdLines');
+
                 // add horizontal line at significance threshold
                 thresholdLines.append("svg:line")
-                    //.attr('class', 'threshold') // styles instead of class
                     .style('stroke', '#333')
                     .style('stroke-dasharray', '5px 10px')
                     .style('stroke-opacity', '0.35')
@@ -346,7 +403,6 @@ function volcanoPlot() {
                 // add vertical line(s) at fold-change threshold (and negative fold-change)
                 [foldChangeThreshold, -1 * foldChangeThreshold].forEach(function (threshold) {
                     thresholdLines.append("svg:line")
-                        //.attr('class', 'threshold') // styles instead of class
                         .style('stroke', '#333')
                         .style('stroke-dasharray', '5px 10px')
                         .style('stroke-opacity', '0.35')
@@ -397,6 +453,8 @@ function volcanoPlot() {
             updatePlot();
         });
     }
+
+    // all functions below are used to set aspects of the plot
 
     chart.width = function (value) {
         if (!arguments.length) return width;

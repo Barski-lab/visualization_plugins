@@ -158,16 +158,16 @@
                     </div>
                 </div>
                 -->
-
-                <!--<div class="input-group mb-3">-->
+                
+                <div class="input-group mb-3">
                     <div class="card">
                         <div class="card-header">
-                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo"
+                            <button class="btn btn-link collapsed" type="button" onclick="toggleAdvancedPlotOptions()" data-toggle="collapse" data-target="#collapseTwo"
                             aria-expanded="true" aria-controls="collapseTwo">
                                 Advanced plot options (v3)
                             </button>
                         </div>
-                        <div id="collapseTwo" class="collapse show">
+                        <div id="collapseTwo" class="collapse">
                             <div class="card-body">
                                 <!-- would need two sets of input groups, 1 for each color mode -->
                                 <div class="col-sm-18">
@@ -190,7 +190,7 @@
                                     
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Accepted (pos) X color:</span>
+                                            <span class="input-group-text">Accepted (positive X) color:</span>
                                         </div>
                                         <input type="color" class="form-control" id="acceptedxcolorpos"  value="#00ff00"> <!-- initial value should reflect graph-->
                                        
@@ -198,7 +198,7 @@
                                     
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Accepted (neg) X color:</span>
+                                            <span class="input-group-text">Accepted (negative X) color:</span>
                                         </div>
                                         <input type="color" class="form-control" id="acceptedxcolorneg"  value="#00ff00"> <!-- initial value should reflect graph-->
                                        
@@ -206,7 +206,7 @@
 
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Rejected X (only) color:</span>
+                                            <span class="input-group-text">Rejected (X only) color:</span>
                                         </div>
                                         <input type="color" class="form-control" id="rejectedxcolor"  value="#ff0000">
                                         <!-- <span class="input-group-text colorpicker-input-addon"></span> -->
@@ -214,7 +214,7 @@
 
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Rejected Y (only) color:</span>
+                                            <span class="input-group-text">Rejected (Y only) color:</span>
                                         </div>
                                         <input type="color" class="form-control" id="rejectedycolor"  value="#cccccc">
                                         <!-- <span class="input-group-text colorpicker-input-addon"></span> -->
@@ -222,7 +222,7 @@
 
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Rejected X and Y color:</span>
+                                            <span class="input-group-text">Rejected (X and Y) color:</span>
                                         </div>
                                         <input type="color" class="form-control" id="rejectedbothcolor"  value="#000000">
                                         <!-- <span class="input-group-text colorpicker-input-addon"></span> -->
@@ -240,7 +240,7 @@
                             </div>
                         </div>
                     </div>
-                <!-- </div> -->
+                </div>
 
                 
 
@@ -416,7 +416,14 @@
 
 
             function toggleAdvancedPlotOptions(){
-
+                // check if visible
+                if ( document.getElementById("collapseTwo").classList.contains('show') ){
+                    document.getElementById("collapseTwo").classList.remove('show');
+                }
+                else{
+                    document.getElementById("collapseTwo").classList.add('show');
+                }
+                // document.getElementById("collapseTwo").classList.toggle('show');
             }
 
         </script>

@@ -1,6 +1,10 @@
 body {
     font-family: 'Noto Sans', sans-serif;
 }
+
+.thresholdLines {
+    clip-path: url(#clip);
+}
 /* 
 .axis path,
 .tick line,
@@ -58,9 +62,7 @@ body {
     clip-path: url(#clip);
 }
 
-.thresholdLines {
-    clip-path: url(#clip);
-}
+
 
 .tooltip {
     position: absolute;
