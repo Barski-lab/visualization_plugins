@@ -153,6 +153,7 @@
                 </div>
                 -->
                 
+                <!-- advanced plot options (dot size/color/transparency)-->
                 <div class="input-group mb-3">
                     <div class="card">
                         <div class="card-header">
@@ -221,22 +222,63 @@
                                         <input type="color" class="form-control" id="rejectedbothcolor"  value="#000000">
                                         <!-- <span class="input-group-text colorpicker-input-addon"></span> -->
                                     </div>
-
-                                    
-
-                                    
                                 </div>
-
-                                <!-- for other color mode 
-                                <div class="col-sm-18">
-
-                                </div>-->
                             </div>
                         </div>
                     </div>
                 </div>
 
-                
+                <!-- gene highlight options -->
+                <div class="input-group mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <button class="btn btn-link collapsed" type="button" onclick="toggleHighlightGeneOptions()" data-toggle="collapse" data-target="#collapseThree"
+                            aria-expanded="true" aria-controls="collapseThree">
+                                Highlight genes
+                            </button>
+                        </div>
+                        <div id="collapseThree" class="collapse">
+                            <div class="card-body">
+                                <!-- would need two sets of input groups, 1 for each color mode -->
+                                <div class="col-sm-18">
+
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Enter gene name(s): </span>
+                                        </div>
+                                        <!-- input -->
+                                        <input type="text" class="form-control" id="givengenenames" aria-label="plot dot opacity" value="">
+                                    </div>
+
+                                    <!-- TODO: need checkboxes for each gene listed -->
+
+
+                                    <!--
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">data point size (1-100):</span>
+                                        </div>
+                                        <input type="number" class="form-control" id="plotdotsize" aria-label="plot dot size" min="1" max="100" value="3">
+                                    </div>
+                                    
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Accepted (positive X) color:</span>
+                                        </div>
+                                        <input type="color" class="form-control" id="acceptedxcolorpos"  value="#00ff00"> 
+                                       
+                                    </div>
+                                    -->
+                                    
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <!-- KEEP AT BOTTOM OF FORM -->
 
@@ -427,6 +469,17 @@
                     document.getElementById("collapseTwo").classList.add('show');
                 }
                 // document.getElementById("collapseTwo").classList.toggle('show');
+            }
+
+            function toggleHighlightGeneOptions(){
+                // check if visible
+                if ( document.getElementById("collapseThree").classList.contains('show') ){
+                    document.getElementById("collapseThree").classList.remove('show');
+                }
+                else{
+                    document.getElementById("collapseThree").classList.add('show');
+                }
+                // document.getElementById("collapseThree").classList.toggle('show');
             }
 
         </script>

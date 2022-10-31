@@ -23,7 +23,7 @@ function volcanoPlot() {
         xTicks,                                                                             // number of ticks on the axis (not customizable)
         yTicks,
         
-        sampleID = "Gene",                                                                  // should be set according to workflow run       
+        sampleID = "GeneId",                                                                  // TODO: named according to workflow. is column name for getting 'name' of each data point (which gene)       
         
         significanceThreshold = parseFloat(d3.select("#fdrthreshold").property("value")),   // significance threshold to colour by
         foldChangeThreshold = parseFloat(d3.select("#foldchange").property("value")),       // fold change level to colour by
@@ -59,7 +59,7 @@ function volcanoPlot() {
         yAxisLabelOffset,
         xTicks, 
         yTicks,
-        sampleID = "Gene",
+        sampleID = "GeneId", 
         significanceThreshold = parseFloat(d3.select("#fdrthreshold").property("value")), 
         foldChangeThreshold = parseFloat(d3.select("#foldchange").property("value")), 
         colorRange, 
