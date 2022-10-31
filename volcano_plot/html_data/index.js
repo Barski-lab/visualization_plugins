@@ -245,12 +245,14 @@ function volcanoPlot() {
                 tooltip.style('visibility', 'visible')
                     .style('font-size', '11px')
                     .html(
-                        '<p>' +
+                        '<p style="fill: #666;font-weight: 700;font-size: 12px;">' +
                         '<strong>' + sampleID + '</strong>: ' + d[sampleID] + '<br/>' +
                         '<strong>' + xColumn + '</strong>: ' + d3.format('.2f')(d[xColumn]) + '<br/>' +
                         '<strong>' + yColumn + '</strong>: ' + d[yColumn] +
                         '</p>'
-                    );
+                    )
+                    .style("top", (event.pageY - 5) + "px")
+                    .style("left", (event.pageX + 20) + "px");
             }
 
             function tipMove() {
