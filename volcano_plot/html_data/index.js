@@ -44,6 +44,7 @@ function volcanoPlot() {
         rejectedColorX = d3.select("#rejectedxcolor").property("value"),
         rejectedColorY = d3.select("#rejectedycolor").property("value"),
         rejectedColorBoth = d3.select("#rejectedbothcolor").property("value");
+        genesToHighlightList = [] // based off of user input
     
      */
     
@@ -72,7 +73,9 @@ function volcanoPlot() {
         acceptedColorXneg = d3.select("#acceptedxcolorneg").property("value"),
         rejectedColorX = d3.select("#rejectedxcolor").property("value"),
         rejectedColorY = d3.select("#rejectedycolor").property("value"),
-        rejectedColorBoth = d3.select("#rejectedbothcolor").property("value");
+        rejectedColorBoth = d3.select("#rejectedbothcolor").property("value"),
+        highlightColor = d3.select("#highlightcolor").property("value"),
+        genesToHighlightList = [];
 
 
 
@@ -295,6 +298,13 @@ function volcanoPlot() {
              * hex color based on what the user has selected in 'advanced plot options' tab
              */
             function circleStyle(d) {
+                // if highlighting is done using a distinct color, check if d[sampleId] is in genesToHighlightList
+                // if it is, color according to highlight
+                if (genesToHighlightList.includes(d[sampleID])){
+                    console.log('found data to highlight. gene name: ', d[sampleID])
+                    return highlightColor = d3.select("#highlightcolor").property("value");
+                }
+
                 // where color scheme toggle can be set
                 // colors used should be able to be set by user
                 //if (d[yColumn] <= significanceThreshold && Math.abs(d[xColumn]) >= foldChangeThreshold) return "#00ff00";//'green';
@@ -341,15 +351,19 @@ function volcanoPlot() {
                 rejectedColorX = d3.select("#rejectedxcolor").property("value");
                 rejectedColorY = d3.select("#rejectedycolor").property("value");
                 rejectedColorBoth = d3.select("#rejectedbothcolor").property("value");
-                var genesToHighlist = d3.select('#highlightlistford3').each(function (p, j) {
-                    console.log(`genes to highlight. p: ${p}, j: ${j}`);
+                highlightColor = d3.select("#highlightcolor").property("value");
+                genesToHighlightList = [];
+                d3.select('#highlightlistford3').each(function (p, j) {
+                    //console.log(`genes to highlight. p: ${p}, j: ${j}`);
                     d3.select(this)
                         .selectAll("li")
                         .each(function (ele, ctx) {
                             tempD = d3.select(this);
-                            console.log('tempD.node().value', tempD.node().value);
+                            //console.log('tempD.node().value', tempD.node().value, tempD.property('innerText'), tempD);
+                            genesToHighlightList.push(tempD.property('innerText'));
                         })
                 });
+                //console.log(`genes to highlight: ${genesToHighlightList}`);
 
                 // reset the plot
                 thresholdLines.remove();
