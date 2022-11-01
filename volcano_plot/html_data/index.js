@@ -341,6 +341,15 @@ function volcanoPlot() {
                 rejectedColorX = d3.select("#rejectedxcolor").property("value");
                 rejectedColorY = d3.select("#rejectedycolor").property("value");
                 rejectedColorBoth = d3.select("#rejectedbothcolor").property("value");
+                var genesToHighlist = d3.select('#highlightlistford3').each(function (p, j) {
+                    console.log(`genes to highlight. p: ${p}, j: ${j}`);
+                    d3.select(this)
+                        .selectAll("li")
+                        .each(function (ele, ctx) {
+                            tempD = d3.select(this);
+                            console.log('tempD.node().value', tempD.node().value);
+                        })
+                });
 
                 // reset the plot
                 thresholdLines.remove();
