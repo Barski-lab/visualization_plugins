@@ -44,6 +44,8 @@ function volcanoPlot() {
         rejectedColorX = d3.select("#rejectedxcolor").property("value"),
         rejectedColorY = d3.select("#rejectedycolor").property("value"),
         rejectedColorBoth = d3.select("#rejectedbothcolor").property("value");
+        highlightPlotDotSize = parseInt(d3.select("#highlightedplotdotsize").property("value")),
+        highlightPlotDotTransparency = parseFloat(d3.select("#highlightedplotdotopacity").property("value")),
         genesToHighlightList = [] // based off of user input
     
      */
@@ -75,6 +77,8 @@ function volcanoPlot() {
         rejectedColorY = d3.select("#rejectedycolor").property("value"),
         rejectedColorBoth = d3.select("#rejectedbothcolor").property("value"),
         highlightColor = d3.select("#highlightcolor").property("value"),
+        highlightPlotDotSize = parseInt(d3.select("#highlightedplotdotsize").property("value")),
+        highlightPlotDotTransparency = parseFloat(d3.select("#highlightedplotdotopacity").property("value")),
         genesToHighlightList = [];
 
 
@@ -302,7 +306,7 @@ function volcanoPlot() {
                 // if it is, color according to highlight
                 if (genesToHighlightList.includes(d[sampleID])){
                     console.log('found data to highlight. gene name: ', d[sampleID])
-                    return highlightColor = d3.select("#highlightcolor").property("value");
+                    return highlightColor;// = d3.select("#highlightcolor").property("value");
                 }
 
                 // where color scheme toggle can be set
@@ -313,6 +317,26 @@ function volcanoPlot() {
                 else if (d[yColumn] <= significanceThreshold) return rejectedColorX; //"#ff0000"//'red';
                 else if (Math.abs(d[xColumn]) >= foldChangeThreshold) return rejectedColorY; //'#cccccc';
                 else return rejectedColorBoth; //'#000000';
+            }
+
+            function circlesSizer(d){
+                if (genesToHighlightList.includes(d[sampleID])){
+                    console.log('found data to highlight. gene name: ', d[sampleID])
+                    return highlightPlotDotSize;// = d3.select("#highlightcolor").property("value");
+                }
+                else{
+                    return plotDotSize;
+                }
+            }
+
+            function circlesOpaquer(d){
+                if (genesToHighlightList.includes(d[sampleID])){
+                    console.log('found data to highlight. gene name: ', d[sampleID])
+                    return highlightPlotDotTransparency;// = d3.select("#highlightcolor").property("value");
+                }
+                else{
+                    return plotDotTransparency;
+                }
             }
 
             function resetZoom() {
@@ -352,6 +376,8 @@ function volcanoPlot() {
                 rejectedColorY = d3.select("#rejectedycolor").property("value");
                 rejectedColorBoth = d3.select("#rejectedbothcolor").property("value");
                 highlightColor = d3.select("#highlightcolor").property("value");
+                highlightPlotDotSize = parseInt(d3.select("#highlightedplotdotsize").property("value")),
+                highlightPlotDotTransparency = parseFloat(d3.select("#highlightedplotdotopacity").property("value")),
                 genesToHighlightList = [];
                 d3.select('#highlightlistford3').each(function (p, j) {
                     //console.log(`genes to highlight. p: ${p}, j: ${j}`);
@@ -402,11 +428,11 @@ function volcanoPlot() {
                 circles.selectAll(".dot")
                     .data(data)
                     .enter().append('circle')
-                    .attr('r', plotDotSize) 
+                    .attr('r', circlesSizer) 
                     .attr('cx', function (d) { return xScale(d[xColumn]); })
                     .attr('cy', function (d) { return yScale(d[yColumn]); })
                     .style('fill', circleStyle)
-                    .style('opacity', plotDotTransparency)
+                    .style('opacity', circlesOpaquer)
                     .on('mouseenter', tipEnter)
                     //.on("mousemove", tipMove)
                     .on('mouseleave', function (d) {

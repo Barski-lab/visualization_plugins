@@ -225,13 +225,7 @@
                                         <!-- <span class="input-group-text colorpicker-input-addon"></span> -->
                                     </div>
 
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Highlighted data point color:</span>
-                                        </div>
-                                        <input type="color" class="form-control" id="highlightcolor"  value="#abcdef">
-                                        <!-- <span class="input-group-text colorpicker-input-addon"></span> -->
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -241,6 +235,7 @@
                 <!-- gene highlight options -->
                 <div class="input-group mb-3">
                     <div class="card">
+                        
                         <div class="card-header">
                             <button class="btn btn-link collapsed" type="button" onclick="toggleHighlightGeneOptions()" data-toggle="collapse" data-target="#collapseThree"
                             aria-expanded="true" aria-controls="collapseThree">
@@ -251,7 +246,30 @@
                             <div class="card-body">
                                 <!-- would need two sets of input groups, 1 for each color mode -->
                                 <div class="col-sm-18">
-                                   
+                                    
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">highlighted data point transparency (less than 1): </span>
+                                        </div>
+                                        <!-- input -->
+                                        <input type="text" class="form-control" id="highlightedplotdotopacity" aria-label="plot dot opacity" value="0.4">
+                                    </div>
+            
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">highlighted data point size (1-100):</span>
+                                        </div>
+                                        <!-- input -->
+                                        <input type="number" class="form-control" id="highlightedplotdotsize" aria-label="plot dot size" min="1" max="100" value="3">
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Highlighted data point color:</span>
+                                        </div>
+                                        <input type="color" class="form-control" id="highlightcolor"  value="#abcdef">
+                                        <!-- <span class="input-group-text colorpicker-input-addon"></span> -->
+                                    </div>
+
                                     <!-- highlight data points (searchable) -->
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
