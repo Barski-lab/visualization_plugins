@@ -19,8 +19,10 @@
     <script type="text/javascript" src="http://canvg.github.io/canvg/rgbcolor.js"></script> 
     <script type="text/javascript" src="http://canvg.github.io/canvg/StackBlur.js"></script>
     <script type="text/javascript" src="http://canvg.github.io/canvg/canvg.js"></script> 
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- auto complete for gene highlighting -->
+    <script src="https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@v2.3.7/dist/latest/bootstrap-autocomplete.min.js"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
@@ -247,11 +249,22 @@
                                             <span class="input-group-text">Enter gene name(s): </span>
                                         </div>
                                         <!-- input -->
-                                        <input type="text" class="form-control" id="givengenenames" aria-label="plot dot opacity" value="">
+                                        <input type="text" class="form-control" id="givengenenames" aria-label="give gene names to highlight" value="">
                                     </div>
 
-                                    <!-- TODO: need checkboxes for each gene listed -->
+                                    <!-- highlight data points (searchable) -->
+                                    <div class="input-group mb-3">
+                                        
+                                        <form autocomplete="off"><input class="form-control" type="text" name="q" id="q" onKeyUp="showResults(this.value)" >
+                                            <div id="genesearchresult"></div>
+                                        </form>
 
+                                        <!-- for the list of selected genes to be displayed-->
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Selected Genes:</span>
+                                            <div id="genehighlightlist"></div>
+                                        </div>
+                                    </div>
 
                                     <!--
                                     <div class="input-group mb-3">
@@ -328,9 +341,25 @@
                 //.xColumn("log2FoldChange") // needs to be variable set according to the workflow this plot is made for
                 //.yColumn("padj");// needs to be variable set according to the workflow this plot is made for
 
+            // for listing genes and making them searchable 
+            var geneList = [];
+            var geneListToHighlight = [];
+            
             d3.tsv(file, parser, function (error, data) {
                 if (error) console.log(error);
 
+                // generate list of genes for selecting highlights
+
+                // console.log('type of data: ', typeof data);
+                // console.log('keys of data: ', Object.keys(data)); // (numbers 1-len as keys?)
+                // console.log('data.toString: ', Object.toString(data));
+                // console.log('data[columns]: ', data['columns']); // actually gives column names
+                // console.log("data.length: ", data.length);
+                // console.log("data['0']['GeneId']: ", data[0]['GeneId']);
+                for (geneI=0; geneI<data.length; geneI++) {//for( var geneI in Array.from(Array(data.length).keys())){
+                    geneList.push(data[geneI]["GeneId"]);
+                }
+                // console.log('genelist len: ', geneList.length);
                 d3.select('#chart')
                     .data([data])
                     .call(volcanoPlot);
@@ -480,6 +509,55 @@
                     document.getElementById("collapseThree").classList.add('show');
                 }
                 // document.getElementById("collapseThree").classList.toggle('show');
+            }
+
+            function autocompleteMatch(input) {
+                if (input == '') {
+                    return [];
+                }
+                var reg = new RegExp(input)
+                return geneList.filter(function(term) {
+                    if (term.match(reg)) {
+                    return term;
+                    }
+                });
+                }
+
+            function showResults(val) {
+                console.log(`showResults(${val})`);
+                res = document.getElementById("genesearchresult");
+                res.innerHTML = '';
+                let list = '';
+                let terms = autocompleteMatch(val);
+                console.log('terms.length: ', terms.length);
+                for (i=0; i<terms.length; i++) {
+                    list += `<li class="dropdown-item" onclick="toogleInHighlightList('${terms[i]}')">` + terms[i] + '</li>';
+                }
+                res.innerHTML = '<ul class="list-group">' + list + '</ul>';
+            }
+
+            function toogleInHighlightList(val){
+                console.log(`toogleInHighlightList(${val})`);
+                // update gene list to highlight
+                if(geneListToHighlight.includes(val)){
+                    geneListToHighlight = geneListToHighlight.filter( function(v) {
+                        return v !== val
+                    });
+                }
+                else{
+                    geneListToHighlight.push(val);
+                }
+                console.log('new gene list to highlight: ', geneListToHighlight);
+
+                // update UI
+                res = document.getElementById("genehighlightlist");
+                res.innerHTML = '';
+                let list = '';
+                for (i=0; i<geneListToHighlight.length; i++) {
+                    list += `<li class="dropdown-item">` + geneListToHighlight[i] + '</li>';
+                }
+                res.innerHTML = '<ul class="list-group">' + list + '</ul>';
+                // if value in list remove, if not add
             }
 
         </script>
