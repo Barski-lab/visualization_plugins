@@ -40,6 +40,8 @@
 
         <div class="row">
             <div class="col-sm-18">
+
+                <!-- plot title -->
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">Plot Title:</span>
@@ -47,6 +49,7 @@
                     <input type="text" class="form-control" aria-label="plottitle" id="plottitle" value="Title">
                 </div>
 
+                <!-- y axis label -->
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">y axis:</span>
@@ -55,6 +58,7 @@
                         value='-log<tspan baseline-shift="sub">10</tspan>False Discovery Rate'>
                 </div>
 
+                <!-- x axis label -->
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">x axis:</span>
@@ -64,6 +68,7 @@
 
                 </div>
 
+                <!-- FDR threshold -->
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">FDR threshold:</span>
@@ -71,6 +76,7 @@
                     <input type="text" class="form-control" aria-label="fdrthreshold" id="fdrthreshold" value="0.05">
                 </div>
 
+                <!-- fold-change threshold -->
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">Fold-change threshold:</span>
@@ -78,83 +84,6 @@
                     <input type="text" class="form-control" aria-label="foldchange" id="foldchange" value="1">
                 </div>
 
-                <!-- color mode no longer needed with advanced coloring options 
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Color Mode (v1):</span>
-                    </div>
-                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="options" id="colormode1" autocomplete="off" checked> Default (4
-                            colors)
-                        </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="options" id="colormode2" autocomplete="off"> Pos-Neg (2 colors)
-                        </label>
-                    </div>
-                </div>
-
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Color Mode (v2):</span>
-                    </div>
-                    <div class="checkbox">
-                        <input type="checkbox" data-on="4 color mode" data-off="2 color mode" id="colormodetoggle"
-                            checked data-toggle="toggle">
-                    </div>
-                </div>
-
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Color Mode (v3):</span>
-                    </div>
-                    <select class="custom-select" id="inputGroupSelect01">
-                        <option selected value="1">color mode 1 (4 colors)</option>
-                        <option value="2">color mode 2 (2 colors)</option>
-                    </select>
-                </div>
-                -->
-
-                <!-- other ways to do expandables (also not working) 
-                <div class="input-group mb-3">
-                    <a class="btn btn-primary" data-toggle="collapse" data-target="#advancedPlotOptions" role="button"
-                        aria-expanded="true" aria-controls="advancedPlotOptions">
-                        Advanced plot options (v1)
-                    </a>
-                    <div class="collapse" id="advancedPlotOptions">
-                        <div class="card card-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-                            squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente
-                            ea proident.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-group mb-3">
-                    <div class="card">
-                        <div class="card-header" id="headingOne">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
-                                    aria-expanded="true" aria-controls="collapseOne">
-                                    Advanced plot options (v2)
-                                </button>
-                            </h5>
-                        </div>
-                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
-                            <div class="card-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-                                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
-                                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it
-                                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-                                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
-                                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth
-                                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                -->
-                
                 <!-- advanced plot options (dot size/color/transparency)-->
                 <div class="input-group mb-3">
                     <div class="card">
@@ -246,7 +175,7 @@
                             <div class="card-body">
                                 <!-- would need two sets of input groups, 1 for each color mode -->
                                 <div class="col-sm-18">
-                                    
+
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">highlighted data point transparency (less than 1): </span>
@@ -315,6 +244,7 @@
 
                 <!-- KEEP AT BOTTOM OF FORM -->
 
+                <!-- download as buttons -->
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">Download plot as:</span>
@@ -331,7 +261,7 @@
                 </div>
 
                 
-
+                <!-- update plot -->
                 <button type="button" class="btn btn-outline-primary" id="apply">Update Plot</button>
 
 
@@ -345,21 +275,18 @@
         </div>
 
         <script type="text/javascript">
-            // instead of having workflows use a script to set values in index.js, maybe have them set values here (first script in body)
-            // would then need to call the setters for each var (not all new vars have setter methods)
-
-            // now set in volcano plots 'constructor'
-            //var yLabel = '-log<tspan baseline-shift="sub">10</tspan>False Discovery Rate', // needs to be variable set according to the workflow this plot is made for
-            //    xLabel = 'log<tspan baseline-shift="sub">2</tspan>Fold-change',// needs to be variable set according to the workflow this plot is made for
-            var file = window.location.href.replace("index.html", "") + "/deseq_report.tsv"; // needs to be variable set according to the workflow this plot is made for
+            // the 4 variables to be set by a bash script will start on the second line of the first <script> in the htmls body
+            var file = window.location.href.replace("index.html", "") + "/deseq_report.tsv"; 
+            var xColName = "log2FoldChange";
+            var yColName = "padj";
+            var dataNameCol = "GeneId";
+            // vars above to be set according to workflow
 
             var volcanoPlot = volcanoPlot()
-                //.xAxisLabel(xLabel)
-                //.yAxisLabel(yLabel)
                 .foldChangeThreshold(1.0)
-                .sampleID("GeneId")
-                //.xColumn("log2FoldChange") // needs to be variable set according to the workflow this plot is made for
-                //.yColumn("padj");// needs to be variable set according to the workflow this plot is made for
+                .sampleID(dataNameCol)
+                .xColumn(xColName) 
+                .yColumn(yColName);
 
             // for listing genes and making them searchable 
             var geneList = [];
